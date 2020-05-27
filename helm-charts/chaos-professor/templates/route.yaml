@@ -1,13 +1,10 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: {{ include "chaosprofessor.fullname" . }}
+  name: {{ include "chaos-professor.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "chaosprofessor.name" . }}
-    helm.sh/chart: {{ include "chaosprofessor.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{ include "chaos-professor.labels" . | indent 4 }}
 spec:
   to:
     kind: Service
-    name: {{ include "chaosprofessor.fullname" . }}
+    name: {{ include "chaos-professor.fullname" . }}

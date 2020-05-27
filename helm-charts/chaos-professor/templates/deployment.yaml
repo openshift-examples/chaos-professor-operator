@@ -1,16 +1,15 @@
 apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
-  name: {{ include "chaosprofessor.fullname" . }}
+  name: {{ include "chaos-professor.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "chaosprofessor.name" . }}
-    helm.sh/chart: {{ include "chaosprofessor.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{ include "chaos-professor.labels" . | indent 4 }}
 spec:
+  strategy:
+    type: Rolling
   replicas: {{ .Values.replicaCount }}
   selector:
-    app.kubernetes.io/name: {{ include "chaosprofessor.name" . }}
+    app.kubernetes.io/name: {{ include "chaos-professor.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   triggers:
   - type: ImageChange
@@ -20,20 +19,18 @@ spec:
       - {{ .Chart.Name }}
       from:
         kind: ImageStreamTag
-        name: "{{ include "chaosprofessor.fullname" . }}:latest"
+        name: "{{ include "chaos-professor.fullname" . }}:latest"
   - type: ConfigChange
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "chaosprofessor.name" . }}
+        app.kubernetes.io/name: {{ include "chaos-professor.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       terminationGracePeriodSeconds: 60
-      strategy:
-        type: Rolling
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ include "chaosprofessor.fullname" . }}"
+          image: "helm/{{ include "chaos-professor.fullname" . }}"
           imagePullPolicy: Always
           env:
           - name: JWS_ADMIN_USERNAME

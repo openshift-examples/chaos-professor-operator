@@ -1,12 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "chaosprofessor.fullname" . }}
+  name: {{ include "chaos-professor.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "chaosprofessor.name" . }}
-    helm.sh/chart: {{ include "chaosprofessor.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{ include "chaos-professor.labels" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -15,5 +12,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "chaosprofessor.name" . }}
+    app.kubernetes.io/name: {{ include "chaos-professor.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
