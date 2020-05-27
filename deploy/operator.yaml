@@ -16,7 +16,7 @@ spec:
       containers:
         - name: chaos-professor-operator
           # Replace this with the built image name
-          image: quay.io/openshift-examples/chaos-professor-operator:latest
+          image: quay.io/openshift-examples/chaos-professor-operator:master
           imagePullPolicy: Always
           env:
             - name: WATCH_NAMESPACE
