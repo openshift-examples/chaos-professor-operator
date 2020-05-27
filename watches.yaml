@@ -2,4 +2,4 @@
 - version: v1alpha1
   group: bohne.io
   kind: ChaosProfessor
-  chart: /opt/helm/helm-charts/chaosprofessor
+  chart: /opt/helm/helm-charts/chaos-professor
