@@ -1,5 +1,5 @@
 ---
 - version: v1alpha1
-  group: bohne.io
+  group: charts.helm.k8s.io
   kind: ChaosProfessor
-  chart: /opt/helm/helm-charts/chaos-professor
+  chart: helm-charts/chaos-professor

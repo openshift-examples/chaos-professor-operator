@@ -1,9 +1,9 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: chaosprofessors.bohne.io
+  name: chaosprofessors.charts.helm.k8s.io
 spec:
-  group: bohne.io
+  group: charts.helm.k8s.io
   names:
     kind: ChaosProfessor
     listKind: ChaosProfessorList
@@ -12,7 +12,10 @@ spec:
   scope: Namespaced
   subresources:
     status: {}
-  version: v1alpha1
+  validation:
+    openAPIV3Schema:
+      type: object
+      x-kubernetes-preserve-unknown-fields: true
   versions:
   - name: v1alpha1
     served: true

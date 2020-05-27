@@ -1,0 +1,29 @@
+apiVersion: charts.helm.k8s.io/v1alpha1
+kind: ChaosProfessor
+metadata:
+  name: example-chaosprofessor
+spec:
+  # Default values copied from <project_dir>/helm-charts/chaos-professor/values.yaml
+  
+  affinity: {}
+  fullnameOverride: ""
+  ingress:
+    annotations: {}
+    enabled: false
+    hosts:
+    - host: chart-example.local
+      paths: []
+    tls: []
+  nameOverride: ""
+  nodeSelector: {}
+  replicaCount: 1
+  resources: {}
+  service:
+    port: 80
+    type: ClusterIP
+  source_repository:
+    context_dir: ""
+    ref: master
+    uri: https://github.com/ConSol/chaos-professor.git
+  tolerations: []
+  

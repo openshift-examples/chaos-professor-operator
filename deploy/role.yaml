@@ -20,14 +20,13 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - pods
-  - services
+  - events
   verbs:
-  - '*'
+  - create
 - apiGroups:
-  - apps
+  - build.openshift.io
   resources:
-  - deployments
+  - buildconfigs
   verbs:
   - '*'
 - apiGroups:
@@ -37,9 +36,9 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - build.openshift.io
+  - image.openshift.io
   resources:
-  - buildconfigs
+  - imagestreams
   verbs:
   - '*'
 - apiGroups:
@@ -49,20 +48,48 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - image.openshift.io
+  - ""
   resources:
-  - images
-  - imagesignatures
-  - imagestreamimages
-  - imagestreamimports
-  - imagestreammappings
-  - imagestreams
-  - imagestreamtags
+  - services
   verbs:
   - '*'
 - apiGroups:
-  - bohne.io
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  verbs:
+  - get
+  - create
+- apiGroups:
+  - apps
+  resourceNames:
+  - chaos-professor-operator
+  resources:
+  - deployments/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+- apiGroups:
+  - apps
+  resources:
+  - replicasets
+  - deployments
+  verbs:
+  - get
+- apiGroups:
+  - charts.helm.k8s.io
   resources:
   - '*'
   verbs:
-  - '*'
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
