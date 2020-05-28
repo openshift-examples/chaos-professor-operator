@@ -1,0 +1,198 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "charts.helm.k8s.io/v1alpha1",
+          "kind": "ChaosProfessor",
+          "metadata": {
+            "name": "example"
+          },
+          "spec": {
+            "affinity": {},
+            "fullnameOverride": "",
+            "ingress": {
+              "annotations": {},
+              "enabled": false,
+              "hosts": [
+                {
+                  "host": "chart-example.local",
+                  "paths": []
+                }
+              ],
+              "tls": []
+            },
+            "nameOverride": "",
+            "nodeSelector": {},
+            "replicaCount": 1,
+            "resources": {},
+            "service": {
+              "port": 80,
+              "type": "ClusterIP"
+            },
+            "source_repository": {
+              "context_dir": "",
+              "ref": "master",
+              "uri": "https://github.com/ConSol/chaos-professor.git"
+            },
+            "tolerations": []
+          }
+        }
+      ]
+    capabilities: Basic Install
+  name: chaos-professor-operator.v0.1.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - kind: ChaosProfessor
+      name: chaosprofessors.charts.helm.k8s.io
+      version: v1alpha1
+  displayName: Chaos Professor Operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments:
+      - name: chaos-professor-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              name: chaos-professor-operator
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                name: chaos-professor-operator
+            spec:
+              containers:
+              - env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['olm.targetNamespaces']
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: OPERATOR_NAME
+                  value: chaos-professor-operator
+                image: quay.io/openshift-examples/chaos-professor-operator:master
+                imagePullPolicy: Always
+                name: chaos-professor-operator
+                resources: {}
+              serviceAccountName: chaos-professor-operator
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          - secrets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+        - apiGroups:
+          - build.openshift.io
+          resources:
+          - buildconfigs
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps.openshift.io
+          resources:
+          - deploymentconfigs
+          verbs:
+          - '*'
+        - apiGroups:
+          - image.openshift.io
+          resources:
+          - imagestreams
+          verbs:
+          - '*'
+        - apiGroups:
+          - route.openshift.io
+          resources:
+          - routes
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - servicemonitors
+          verbs:
+          - get
+          - create
+        - apiGroups:
+          - apps
+          resourceNames:
+          - chaos-professor-operator
+          resources:
+          - deployments/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - get
+        - apiGroups:
+          - apps
+          resources:
+          - replicasets
+          - deployments
+          verbs:
+          - get
+        - apiGroups:
+          - charts.helm.k8s.io
+          resources:
+          - '*'
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        serviceAccountName: chaos-professor-operator
+    strategy: deployment
+  installModes:
+  - supported: true
+    type: OwnNamespace
+  - supported: true
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - ""
+  maintainers:
+  - {}
+  maturity: alpha
+  provider: {}
+  version: 0.1.0
